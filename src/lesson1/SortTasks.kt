@@ -2,6 +2,11 @@
 
 package lesson1
 
+import java.io.File
+import java.io.FileWriter
+import java.util.*
+import kotlin.collections.ArrayList
+
 /**
  * Сортировка времён
  *
@@ -31,7 +36,24 @@ package lesson1
  * В случае обнаружения неверного формата файла бросить любое исключение.
  */
 fun sortTimes(inputName: String, outputName: String) {
-    TODO()
+    val data = ArrayList<Int>()
+    val inp = File(inputName)
+    val scan = Scanner(inp)
+    while (scan.hasNextLine()) {
+        val str = scan.nextLine()
+        val arr = str.split(":".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+        data.add(Integer.parseInt(arr[0]) * 3600 + Integer.parseInt(arr[1]) * 60 + Integer.parseInt(arr[2]))
+    }
+    scan.close()
+    Collections.sort(data)
+    val fw = FileWriter(outputName)
+    for (i in data) {
+        val hours = i / 3600
+        val minutes = i / 60 % 60
+        val seconds = i % 3600 % 60
+        fw.write(String.format("%02d:%02d:%02d", hours, minutes, seconds) + "\r\n")
+    }
+    fw.close()
 }
 
 /**
@@ -95,7 +117,21 @@ fun sortAddresses(inputName: String, outputName: String) {
  * 121.3
  */
 fun sortTemperatures(inputName: String, outputName: String) {
-    TODO()
+    val inp = File(inputName)
+    val scan = Scanner(inp)
+    val data = ArrayList<Double>()
+    while (scan.hasNextLine()) {
+        val temperature = java.lang.Double.parseDouble(scan.nextLine())
+        if (temperature < -273.0 || temperature > 500.0) throw IllegalArgumentException()
+        data.add(temperature)
+    }
+    Collections.sort(data)
+    val fw = FileWriter(File(outputName))
+    for (i in data) {
+        fw.write(java.lang.Double.toString(i) + "\r\n")
+    }
+    fw.close()
+    scan.close()
 }
 
 /**
@@ -146,6 +182,9 @@ fun sortSequence(inputName: String, outputName: String) {
  * Результат: second = [1 3 4 9 9 13 15 20 23 28]
  */
 fun <T : Comparable<T>> mergeArrays(first: Array<T>, second: Array<T?>) {
-    TODO()
+    for (i in first.indices) {
+        second[i] = first[i]
+    }
+    Arrays.sort(second)
 }
 
