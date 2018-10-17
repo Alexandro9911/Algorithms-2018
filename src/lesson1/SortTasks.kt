@@ -39,9 +39,8 @@ fun sortTimes(inputName: String, outputName: String) {
     val data = ArrayList<Int>()
     val inp = File(inputName)
     val scan = Scanner(inp)
-    while (scan.hasNextLine()) {
-        val str = scan.nextLine()
-        val arr = str.split(":".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+    inp.forEachLine {
+        val arr = it.split(":".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
         data.add(Integer.parseInt(arr[0]) * 3600 + Integer.parseInt(arr[1]) * 60 + Integer.parseInt(arr[2]))
     }
     scan.close()
@@ -120,15 +119,15 @@ fun sortTemperatures(inputName: String, outputName: String) {
     val inp = File(inputName)
     val scan = Scanner(inp)
     val data = ArrayList<Double>()
-    while (scan.hasNextLine()) {
-        val temperature = java.lang.Double.parseDouble(scan.nextLine())
+    inp.forEachLine {
+        val temperature = it.toDouble()
         if (temperature < -273.0 || temperature > 500.0) throw IllegalArgumentException()
         data.add(temperature)
     }
     Collections.sort(data)
     val fw = FileWriter(File(outputName))
     for (i in data) {
-        fw.write(java.lang.Double.toString(i) + "\r\n")
+        fw.write(i.toString() + "\r\n")
     }
     fw.close()
     scan.close()
@@ -182,9 +181,19 @@ fun sortSequence(inputName: String, outputName: String) {
  * Результат: second = [1 3 4 9 9 13 15 20 23 28]
  */
 fun <T : Comparable<T>> mergeArrays(first: Array<T>, second: Array<T?>) {
-    for (i in first.indices) {
-        second[i] = first[i]
+    var i = first.size
+    var j = 0
+    var k = 0
+    while (k < first.size && i < second.size) {
+        if (first[k] < second[i]!!) {
+            second[j] = first[k]
+            k++
+        } else {
+            second[j] = second[i]
+            i++
+        }
+        j++
     }
-    Arrays.sort(second)
+    for (c in k until first.size)
+        second[j++] = first[c]
 }
-

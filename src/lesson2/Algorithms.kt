@@ -4,6 +4,9 @@ package lesson2
 
 import java.io.File
 import java.util.*
+import java.util.HashSet
+import kotlin.collections.ArrayList
+
 
 /**
  * Получение наибольшей прибыли (она же -- поиск максимального подмассива)
@@ -30,27 +33,22 @@ import java.util.*
  * В случае обнаружения неверного формата файла бросить любое исключение.
  */
 fun optimizeBuyAndSell(inputName: String): Pair<Int, Int> {
-    val inp = File(inputName)
-    val scan = Scanner(inp)
     val data = ArrayList<Int>()
-    while (scan.hasNextLine()) {
-        val str = scan.nextLine()
-        data.add(Integer.parseInt(str))
+    var answ = Pair(0, 0)
+    var different = 0
+    val inp = File(inputName)
+    inp.forEachLine {
+        data.add(it.toInt())
     }
-    var n = 0
-    var min = 0
-    var max = 0
-    for (i in data.indices) {
-        for (j in data.size - 1 downTo 1) {
-            if (j - i > 0 && j - i > n) {
-                max = i
-                min = j
-                n = j - i
+    for (i in 0 until data.size) {
+        for (j in i until data.size) {
+            if (data[j] - data[i] > different) {
+                different = data[j] - data[i]
+                answ = Pair(i + 1, j + 1)
             }
         }
     }
-    println(data[min].toString() + " " + data[max])
-    return Pair(min + 1, max + 1)
+    return answ
 }
 
 /**
@@ -100,22 +98,11 @@ fun optimizeBuyAndSell(inputName: String): Pair<Int, Int> {
  * Х х Х
  */
 fun josephTask(menNumber: Int, choiceInterval: Int): Int {
-    return josephus(menNumber, choiceInterval, 1)
+    var answ = 0
+    for (i in 1..menNumber)
+        answ = (answ + choiceInterval) % i
+    return answ + 1
 }
-
-private fun josephus(n: Int, k: Int, start: Int): Int {
-    if (n == 1) {
-        return 1
-    }
-    val newSp = (start + k - 2) % n + 1
-    val survivor = josephus(n - 1, k, newSp)
-    return if (survivor < newSp) {
-        survivor
-    } else {
-        survivor + 1
-    }
-}
-
 
 /**
  * Наибольшая общая подстрока.
@@ -132,6 +119,7 @@ fun longestCommonSubstring(first: String, second: String): String {
     val table = Array(first.length) { IntArray(second.length) }
     var longest = 0
     var answ = ""
+    val result = HashSet<String>()
     for (i in 0 until first.length) {
         for (j in 0 until second.length) {
             if (first.get(i) != second[j]) {
@@ -145,8 +133,13 @@ fun longestCommonSubstring(first: String, second: String): String {
                 longest = table[i][j]
             }
             if (table[i][j] == longest) {
-                answ = first.substring(i - longest + 1, i + 1)
+                result.add(first.substring(i - longest + 1, i + 1))
             }
+        }
+    }
+    for (str in result) {
+        if (str.length > answ.length) {
+            answ = str
         }
     }
     return answ
