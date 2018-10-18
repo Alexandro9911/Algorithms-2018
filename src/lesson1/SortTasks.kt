@@ -38,12 +38,10 @@ import kotlin.collections.ArrayList
 fun sortTimes(inputName: String, outputName: String) {
     val data = ArrayList<Int>()
     val inp = File(inputName)
-    val scan = Scanner(inp)
     inp.forEachLine {
         val arr = it.split(":".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
         data.add(Integer.parseInt(arr[0]) * 3600 + Integer.parseInt(arr[1]) * 60 + Integer.parseInt(arr[2]))
     }
-    scan.close()
     Collections.sort(data)
     val fw = FileWriter(outputName)
     for (i in data) {
@@ -117,7 +115,6 @@ fun sortAddresses(inputName: String, outputName: String) {
  */
 fun sortTemperatures(inputName: String, outputName: String) {
     val inp = File(inputName)
-    val scan = Scanner(inp)
     val data = ArrayList<Double>()
     inp.forEachLine {
         val temperature = it.toDouble()
@@ -130,7 +127,6 @@ fun sortTemperatures(inputName: String, outputName: String) {
         fw.write(i.toString() + "\r\n")
     }
     fw.close()
-    scan.close()
 }
 
 /**
@@ -185,7 +181,7 @@ fun <T : Comparable<T>> mergeArrays(first: Array<T>, second: Array<T?>) {
     var j = 0
     var k = 0
     while (k < first.size && i < second.size) {
-        if (first[k] < second[i]!!) {
+        if (first[k] <= second[i]!!) {
             second[j] = first[k]
             k++
         } else {
@@ -194,6 +190,6 @@ fun <T : Comparable<T>> mergeArrays(first: Array<T>, second: Array<T?>) {
         }
         j++
     }
-    for (c in k until first.size)
-        second[j++] = first[c]
+    for (count in k until first.size)
+        second[j++] = first[count]
 }
