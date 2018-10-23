@@ -40,7 +40,9 @@ fun sortTimes(inputName: String, outputName: String) {
     val inp = File(inputName)
     inp.forEachLine {
         val arr = it.split(":".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
-        data.add(Integer.parseInt(arr[0]) * 3600 + Integer.parseInt(arr[1]) * 60 + Integer.parseInt(arr[2]))
+        if ((arr[0].toInt() > 23 || arr[0].toInt() < 0) || (arr[1].toInt() > 60 || arr[1].toInt() < 0)
+                || (arr[2].toInt() > 60 || arr[2].toInt() < 0)) throw  java.lang.IllegalArgumentException()
+            data.add(Integer.parseInt(arr[0]) * 3600 + Integer.parseInt(arr[1]) * 60 + Integer.parseInt(arr[2]))
     }
     Collections.sort(data)
     val fw = FileWriter(outputName)
@@ -121,7 +123,7 @@ fun sortTemperatures(inputName: String, outputName: String) {
         if (temperature < -273.0 || temperature > 500.0) throw IllegalArgumentException()
         data.add(temperature)
     }
-    Collections.sort(data)
+    data.sort()
     val fw = FileWriter(File(outputName))
     for (i in data) {
         fw.write(i.toString() + "\r\n")

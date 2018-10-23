@@ -118,31 +118,23 @@ fun josephTask(menNumber: Int, choiceInterval: Int): Int {
 fun longestCommonSubstring(first: String, second: String): String {
     val table = Array(first.length) { IntArray(second.length) }
     var longest = 0
-    var answ = ""
-    val result = HashSet<String>()
+    var maxI = 0
     for (i in 0 until first.length) {
         for (j in 0 until second.length) {
-            if (first.get(i) != second[j]) {
-                continue
-            }
-            table[i][j] = if (i == 0 || j == 0)
-                1
-            else
-                1 + table[i - 1][j - 1]
-            if (table[i][j] > longest) {
-                longest = table[i][j]
-            }
-            if (table[i][j] == longest) {
-                result.add(first.substring(i - longest + 1, i + 1))
+            if (first[i] == second[j]) {
+                if (i != 0 && j != 0) {
+                    table[i][j] = table[i - 1][j - 1] + 1
+                } else {
+                    table[i][j] = 1
+                }
+                if (table[i][j] > longest) {
+                    longest = table[i][j]
+                    maxI = i
+                }
             }
         }
     }
-    for (str in result) {
-        if (str.length > answ.length) {
-            answ = str
-        }
-    }
-    return answ
+    return first.substring(maxI - longest + 1, maxI + 1)
 }
 
 /**
