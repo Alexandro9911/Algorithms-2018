@@ -6,6 +6,7 @@ import java.io.File
 import java.util.*
 import java.util.HashSet
 import kotlin.collections.ArrayList
+import kotlin.collections.LinkedHashMap
 
 
 /**
@@ -201,5 +202,49 @@ private fun isprime(n: Int): Boolean {
  * Остальные символы ни в файле, ни в словах не допускаются.
  */
 fun baldaSearcher(inputName: String, words: Set<String>): Set<String> {
-    TODO()
+    val answ = mutableSetOf<String>()
+    val temp = words.toMutableList()
+    val inputFile = File(inputName)
+    val table = Array(3) { Array(3) { " " } }
+    var counter = 0
+    val regex = Regex("""[A-Я]|[A-Z]""")
+    inputFile.forEachLine {
+        val listChars = it.split(" ")
+        for (ch in listChars) {
+            if (!ch.matches(regex)) throw IllegalArgumentException()
+            table[counter] = listChars.toTypedArray()
+        }
+        counter++
+    }
+    for (y in 0 until table.size) {
+        for (x in 0 until table[y].size) {
+            temp.forEach() {
+                if (table[y][x] == it[0].toString() && finder(it[1], Pair(x, y), it.substring(2), table))
+                    answ.add(it)
+            }
+        }
+    }
+    return answ
 }
+
+fun finder(ch: Char, position: Pair<Int, Int>, string: String, table: Array<Array<String>>): Boolean {
+    var answ = false
+    val directions = listOf(Pair(1, 0), Pair(0, -1), Pair(0, 1), Pair(-1, 0))
+    for (coord in directions) {
+        val colum = coord.first + position.first
+        val row = coord.second + position.second
+        val m = table[position.second].size
+        if ((colum >= 0) && (row >= 0) && (colum <= m - 1) && (row <= table.size - 1))
+            if (table[row][colum].equals(ch.toString())) {
+                if (string.equals("")) {
+                    return true
+                }
+                answ = finder(string[0], Pair(colum, row), string.substring(1), table)
+                if (answ) {
+                    return answ
+                }
+            }
+    }
+    return answ
+}
+

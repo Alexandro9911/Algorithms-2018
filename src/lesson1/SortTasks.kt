@@ -131,6 +131,8 @@ fun sortTemperatures(inputName: String, outputName: String) {
     fw.close()
 }
 
+
+
 /**
  * Сортировка последовательности
  *
