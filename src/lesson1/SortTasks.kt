@@ -34,6 +34,9 @@ import kotlin.collections.ArrayList
  * 19:56:14
  *
  * В случае обнаружения неверного формата файла бросить любое исключение.
+ *
+ *  Трудоемкость =  O(N)   Ресурсоемкость =O(N)
+ *
  */
 fun sortTimes(inputName: String, outputName: String) {
     val data = ArrayList<Int>()
@@ -42,11 +45,11 @@ fun sortTimes(inputName: String, outputName: String) {
         val arr = it.split(":".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
         if ((arr[0].toInt() > 23 || arr[0].toInt() < 0) || (arr[1].toInt() > 60 || arr[1].toInt() < 0)
                 || (arr[2].toInt() > 60 || arr[2].toInt() < 0)) throw  java.lang.IllegalArgumentException()
-            data.add(Integer.parseInt(arr[0]) * 3600 + Integer.parseInt(arr[1]) * 60 + Integer.parseInt(arr[2]))
+        data.add(Integer.parseInt(arr[0]) * 3600 + Integer.parseInt(arr[1]) * 60 + Integer.parseInt(arr[2]))
     }
     Collections.sort(data)
     val fw = FileWriter(outputName)
-    for (i in data) {
+    for (i in data) {   // O(N)
         val hours = i / 3600
         val minutes = i / 60 % 60
         val seconds = i % 3600 % 60
@@ -114,11 +117,13 @@ fun sortAddresses(inputName: String, outputName: String) {
  * 24.7
  * 99.5
  * 121.3
+ *
+ * Трудоемкость =  O(n)   Ресурсоемкость = O(1)
  */
 fun sortTemperatures(inputName: String, outputName: String) {
-    val inp = File(inputName)
-    val data = ArrayList<Double>()
-    inp.forEachLine {
+    val input = File(inputName)
+    var data = ArrayList<Double>()
+    input.forEachLine {
         val temperature = it.toDouble()
         if (temperature < -273.0 || temperature > 500.0) throw IllegalArgumentException()
         data.add(temperature)
@@ -130,8 +135,6 @@ fun sortTemperatures(inputName: String, outputName: String) {
     }
     fw.close()
 }
-
-
 
 /**
  * Сортировка последовательности
@@ -179,6 +182,9 @@ fun sortSequence(inputName: String, outputName: String) {
  * second = [null null null null null 1 3 9 13 18 23]
  *
  * Результат: second = [1 3 4 9 9 13 15 20 23 28]
+ *
+ *  Трудоемкость =  O(N)   Ресурсоемкость = 0(1)
+ *
  */
 fun <T : Comparable<T>> mergeArrays(first: Array<T>, second: Array<T?>) {
     var i = first.size

@@ -4,9 +4,7 @@ package lesson2
 
 import java.io.File
 import java.util.*
-import java.util.HashSet
 import kotlin.collections.ArrayList
-import kotlin.collections.LinkedHashMap
 
 
 /**
@@ -32,21 +30,33 @@ import kotlin.collections.LinkedHashMap
  * Например, для приведённого выше файла результат должен быть Pair(3, 4)
  *
  * В случае обнаружения неверного формата файла бросить любое исключение.
+ *
+ *  Трудоемкость = O(N)    Ресурсоемкость = O(N)
  */
 fun optimizeBuyAndSell(inputName: String): Pair<Int, Int> {
     val data = ArrayList<Int>()
-    var answ = Pair(0, 0)
-    var different = 0
     val inp = File(inputName)
+    var max = 0
+    var tmp = 0
+    var first = 0
+    var answ = Pair(0, 0)
     inp.forEachLine {
+        if (it.toInt() < 0) throw IllegalArgumentException()
         data.add(it.toInt())
     }
-    for (i in 0 until data.size) {
-        for (j in i until data.size) {
-            if (data[j] - data[i] > different) {
-                different = data[j] - data[i]
-                answ = Pair(i + 1, j + 1)
-            }
+    val subArr = IntArray(data.size - 1)
+    for (i in 0 until data.size - 1) {
+        subArr[i] = data[i + 1] - data[i]
+    }
+    for (i in 0 until subArr.size) {
+        tmp += subArr[i]
+        if (tmp > max) {
+            max = tmp
+            answ = Pair(first + 2, i + 2)
+        }
+        if (tmp < 0) {
+            tmp = 0
+            first = i
         }
     }
     return answ
@@ -97,6 +107,9 @@ fun optimizeBuyAndSell(inputName: String): Pair<Int, Int> {
  * Х Х 3
  * Х   Х
  * Х х Х
+ *
+ *  Трудоемкость = O(N)    Ресурсоемкость = O(1)
+ *
  */
 fun josephTask(menNumber: Int, choiceInterval: Int): Int {
     var answ = 0
@@ -115,6 +128,9 @@ fun josephTask(menNumber: Int, choiceInterval: Int): Int {
  * При сравнении подстрок, регистр символов *имеет* значение.
  * Если имеется несколько самых длинных общих подстрок одной длины,
  * вернуть ту из них, которая встречается раньше в строке first.
+ *
+ *  Трудоемкость = O(N*M)    Ресурсоемкость = O(N*M)
+ *
  */
 fun longestCommonSubstring(first: String, second: String): String {
     val table = Array(first.length) { IntArray(second.length) }
@@ -147,6 +163,9 @@ fun longestCommonSubstring(first: String, second: String): String {
  *
  * Справка: простым считается число, которое делится нацело только на 1 и на себя.
  * Единица простым числом не считается.
+ *
+ *  Трудоемкость = O(N)    Ресурсоемкость = O(N)
+ *
  */
 fun calcPrimesNumber(limit: Int): Int {
     var clc = 0
@@ -164,6 +183,9 @@ fun calcPrimesNumber(limit: Int): Int {
     return clc
 }
 
+/**
+ * O(N)
+ */
 private fun isprime(n: Int): Boolean {
     if (n == 1) return false
     var d = 2
@@ -200,6 +222,8 @@ private fun isprime(n: Int): Boolean {
  * Все слова и буквы -- русские или английские, прописные.
  * В файле буквы разделены пробелами, строки -- переносами строк.
  * Остальные символы ни в файле, ни в словах не допускаются.
+ *
+ *  Трудоемкость = O(N*M*K)    Ресурсоемкость = O(N*M)
  */
 fun baldaSearcher(inputName: String, words: Set<String>): Set<String> {
     val answ = mutableSetOf<String>()
@@ -209,15 +233,15 @@ fun baldaSearcher(inputName: String, words: Set<String>): Set<String> {
     var counter = 0
     val regex = Regex("""[A-Я]|[A-Z]""")
     inputFile.forEachLine {
-        val listChars = it.split(" ")
-        for (ch in listChars) {
+        val listStr = it.split(" ")
+        for (ch in listStr) {
             if (!ch.matches(regex)) throw IllegalArgumentException()
-            table[counter] = listChars.toTypedArray()
+            table[counter] = listStr.toTypedArray()
         }
         counter++
     }
-    for (y in 0 until table.size) {
-        for (x in 0 until table[y].size) {
+    for (y in 0 until table.size) {    //O(M)
+        for (x in 0 until table[y].size) { // O(N)
             temp.forEach() {
                 if (table[y][x] == it[0].toString() && finder(it[1], Pair(x, y), it.substring(2), table))
                     answ.add(it)
@@ -227,6 +251,9 @@ fun baldaSearcher(inputName: String, words: Set<String>): Set<String> {
     return answ
 }
 
+/**
+ * Трудоемкость = O(K) Ресурсоемкость = O(1)
+ */
 fun finder(ch: Char, position: Pair<Int, Int>, string: String, table: Array<Array<String>>): Boolean {
     var answ = false
     val directions = listOf(Pair(1, 0), Pair(0, -1), Pair(0, 1), Pair(-1, 0))
