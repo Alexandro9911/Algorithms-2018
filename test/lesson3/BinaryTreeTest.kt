@@ -1,11 +1,11 @@
 package lesson3
 
 import org.junit.jupiter.api.Tag
-import kotlin.test.Test
+import org.junit.jupiter.api.assertThrows
 import java.util.*
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.NoSuchElementException
+import kotlin.collections.AbstractCollection
+import kotlin.test.*
 
 class BinaryTreeTest {
     private fun testAdd(create: () -> CheckableSortedSet<Int>) {
@@ -109,6 +109,17 @@ class BinaryTreeTest {
                 assertEquals(treeIt.next(), binaryIt.next())
             }
         }
+    }
+
+    @Test
+    fun testIteratorWithEmptyTree() {
+        val tree = KtBinaryTree<Int>()
+        val treeSet = TreeSet<Int>()
+        val treeIt = tree.iterator()
+        val treeSetIt = treeSet.iterator()
+        val second = assertThrows<NoSuchElementException> { treeIt.next() }
+        val first = assertThrows<NoSuchElementException> { treeSetIt.next() }
+        assertEquals(first, second)
     }
 
     @Test
