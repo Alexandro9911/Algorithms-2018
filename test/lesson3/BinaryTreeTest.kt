@@ -114,12 +114,13 @@ class BinaryTreeTest {
     @Test
     fun testIteratorWithEmptyTree() {
         val tree = KtBinaryTree<Int>()
-        val treeSet = TreeSet<Int>()
         val treeIt = tree.iterator()
-        val treeSetIt = treeSet.iterator()
-        val second = assertThrows<NoSuchElementException> { treeIt.next() }
-        val first = assertThrows<NoSuchElementException> { treeSetIt.next() }
-        assertEquals(first, second)
+        try {
+            treeIt.next()
+            fail("Excepted NoSuchElementException")
+        } catch (ex: NoSuchElementException) {
+
+        }
     }
 
     @Test
@@ -180,5 +181,26 @@ class BinaryTreeTest {
     @Tag("Hard")
     fun testIteratorRemoveJava() {
         testIteratorRemove { createJavaTree() }
+    }
+    @Test
+fun removeTest2(){
+        val tree = KtBinaryTree<Int>()
+        tree.add(4)
+        tree.add(10)
+        tree.add(-1)
+        tree.add(5)
+        tree.add(7)
+        tree.add(9)
+        assertEquals(6, tree.size)
+        tree.remove(5)
+        tree.remove(7)
+        assertFalse(tree.contains(5))
+        assertFalse(tree.contains(7))
+        assertEquals(4, tree.size)
+        val tree2 = KtBinaryTree<Int>()
+        tree2.add(4)
+        tree2.add(4)
+        assertEquals(1,tree2.size)
+        assertTrue(tree2.contains(4))
     }
 }
