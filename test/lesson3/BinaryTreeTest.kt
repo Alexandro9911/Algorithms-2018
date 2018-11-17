@@ -122,6 +122,21 @@ class BinaryTreeTest {
 
         }
     }
+    @Test
+    fun testIteratorRemove2(){
+        val tree = KtBinaryTree<Int>()
+        tree.add(4)
+        tree.add(5)
+        tree.add(10)
+        val treeIt = tree.iterator()
+        try {
+            treeIt.remove()
+            treeIt.next()
+            fail("Excepted IllegalStateException")
+        } catch (ex: IllegalStateException) {
+
+        }
+    }
 
     @Test
     @Tag("Normal")

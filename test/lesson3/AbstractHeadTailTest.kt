@@ -121,6 +121,5 @@ abstract class AbstractHeadTailTest {
         assertFalse(set.contains(0))
         assertEquals(7, set.size)
         assertEquals(10, tree.size)
-
     }
 }
