@@ -103,35 +103,31 @@ class KtBinaryTree<T : Comparable<T>>() : AbstractMutableSet<T>(), CheckableSort
             if (left == null && right == null) {
                 parent.replace(node, null)
             } else {
-                if (left == null && right == null) {
-                    parent.replace(node, null)
+                if (right == null) {
+                    parent.replace(node, left)
                 } else {
-                    if (right == null) {
-                        parent.replace(node, left)
+                    if (left == null) {
+                        parent.replace(node, right)
                     } else {
-                        if (left == null) {
-                            parent.replace(node, right)
+                        val change = min(right, node)
+                        val partial = Node(change.first.value)
+                        if (partial.value != left.value) {
+                            partial.left = left
                         } else {
-                            val change = min(right, node)
-                            val partial = Node(change.first.value)
-                            if (partial.value != left.value) {
-                                partial.left = left
-                            } else {
-                                partial.left = null
-                            }
-                            if (partial.value != right.value) {
-                                partial.right = right
-                            } else {
-                                if (right.right != null) {
-                                    partial.right = right.right
-                                } else {
-                                    partial.right = null
-                                }
-                            }
-                            parent.replace(node, partial)
-                            if (change.first.right != null) change.second.replace(change.first, change.first.right)
-                            else change.second.replace(change.first, null)
+                            partial.left = null
                         }
+                        if (partial.value != right.value) {
+                            partial.right = right
+                        } else {
+                            if (right.right != null) {
+                                partial.right = right.right
+                            } else {
+                                partial.right = null
+                            }
+                        }
+                        parent.replace(node, partial)
+                        if (change.first.right != null) change.second.replace(change.first, change.first.right)
+                        else change.second.replace(change.first, null)
                     }
                 }
             }
