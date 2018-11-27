@@ -39,6 +39,8 @@ class KtBinaryTree<T : Comparable<T>>() : AbstractMutableSet<T>(), CheckableSort
 
     private class Node<T>(var value: T) {
 
+        var parent: Node<T>? = null
+
         var left: Node<T>? = null
 
         var right: Node<T>? = null
@@ -52,6 +54,7 @@ class KtBinaryTree<T : Comparable<T>>() : AbstractMutableSet<T>(), CheckableSort
             return false
         }
         val newNode = Node(element)
+        newNode.parent = closest
         when {
             closest == null -> root = newNode
             comparison < 0 -> {
@@ -80,10 +83,11 @@ class KtBinaryTree<T : Comparable<T>>() : AbstractMutableSet<T>(), CheckableSort
      * Удаление элемента в дереве
      * Средняя
      *
-     * Трудоемкость =  в худшем случае О(h),  в среднем O(log h)   ресурсоемкость O(h)
+     * Трудоемкость =О(h)   ресурсоемкость O(1)
      *
      */
     override fun remove(element: T): Boolean {
+        if(size == 0) throw NoSuchElementException()
         remove(element, root!!, null)
         size--
         return contains(element)
@@ -222,12 +226,10 @@ class KtBinaryTree<T : Comparable<T>>() : AbstractMutableSet<T>(), CheckableSort
          * Трудоемкость = О(h) Ресурсоемкость = R(1)
          */
         override fun remove() {
-            if (current != null) remove(current!!.value)
-            else {
-                throw IllegalStateException()
-            }
+            current?.value?.let { remove(it, current, current!!.parent) } ?: throw IllegalStateException()
         }
     }
+
 
     override fun iterator(): MutableIterator<T> = BinaryTreeIterator()
 

@@ -137,6 +137,17 @@ class BinaryTreeTest {
 
         }
     }
+    @Test
+    fun testRemoveEmptyTree(){
+        val tree = KtBinaryTree<Int>()
+        try {
+            tree.remove(666)
+            fail("Excepted NoSuchElementException")
+        } catch (ex: NoSuchElementException) {
+
+        }
+    }
+
 
     @Test
     @Tag("Normal")
@@ -197,8 +208,9 @@ class BinaryTreeTest {
     fun testIteratorRemoveJava() {
         testIteratorRemove { createJavaTree() }
     }
+
     @Test
-fun removeTest2(){
+    fun removeTest2() {
         val tree = KtBinaryTree<Int>()
         tree.add(4)
         tree.add(10)
@@ -215,7 +227,7 @@ fun removeTest2(){
         val tree2 = KtBinaryTree<Int>()
         tree2.add(4)
         tree2.add(4)
-        assertEquals(1,tree2.size)
+        assertEquals(1, tree2.size)
         assertTrue(tree2.contains(4))
     }
 }
