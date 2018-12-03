@@ -140,12 +140,8 @@ class BinaryTreeTest {
     @Test
     fun testRemoveEmptyTree(){
         val tree = KtBinaryTree<Int>()
-        try {
-            tree.remove(666)
-            fail("Excepted NoSuchElementException")
-        } catch (ex: NoSuchElementException) {
-
-        }
+        val bool =tree.remove(666)
+        assertFalse(bool)
     }
 
 

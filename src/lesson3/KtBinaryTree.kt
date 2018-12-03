@@ -87,7 +87,7 @@ class KtBinaryTree<T : Comparable<T>>() : AbstractMutableSet<T>(), CheckableSort
      *
      */
     override fun remove(element: T): Boolean {
-        if(size == 0) throw NoSuchElementException()
+        if(size == 0) return false
         remove(element, root!!, null)
         size--
         return contains(element)
