@@ -2,6 +2,10 @@
 
 package lesson5
 
+import java.util.*
+import kotlin.NoSuchElementException
+
+
 /**
  * Эйлеров цикл.
  * Средняя
@@ -31,6 +35,7 @@ package lesson5
 fun Graph.findEulerLoop(): List<Graph.Edge> {
     TODO()
 }
+
 
 /**
  * Минимальное остовное дерево.
@@ -87,9 +92,37 @@ fun Graph.minimumSpanningTree(): Graph {
  * В данном случае ответ (A, E, F, D, G, J)
  *
  * Эта задача может быть зачтена за пятый и шестой урок одновременно
+ *
+ * Tрудоемкость =  O(V*E)  Ресурсоемкость = O(V^2)
  */
+
 fun Graph.largestIndependentVertexSet(): Set<Graph.Vertex> {
-    TODO()
+    if (this.vertices.isEmpty()) {
+        throw NoSuchElementException()
+    } else {
+        val child = HashSet<Graph.Vertex>()
+        val next = HashSet<Graph.Vertex>()
+        val fVert = this.vertices.iterator().next()
+        next.add(fVert)
+        fun put(parent: Graph.Vertex, child: MutableSet<Graph.Vertex>, next: MutableSet<Graph.Vertex>, graph: Graph) {
+            for (i in graph.getNeighbors(parent)) {
+                if (!next.contains(i) && !child.contains(i)) {
+                    if (next.contains(parent)) {
+                        child.add(i)
+                    } else {
+                        next.add(i)
+                    }
+                    put(i, child, next, graph)
+
+                }
+            }
+        }
+        put(fVert, child, next, this)
+        return when {
+            next.size <= child.size -> child
+            else -> next
+        }
+    }
 }
 
 /**
@@ -111,7 +144,25 @@ fun Graph.largestIndependentVertexSet(): Set<Graph.Vertex> {
  * J ------------ K
  *
  * Ответ: A, E, J, K, D, C, H, G, B, F, I
+ *
+ * Трудоемкость = O(V!) Ресурсоемкость = О(V!)
  */
 fun Graph.longestSimplePath(): Path {
-    TODO()
+    val stack = Stack<Path>()
+    if (this.vertices.isEmpty()) {
+        throw NoSuchElementException()
+    } else {
+        this.vertices.forEach { it -> stack.add(Path(it)) }
+        var tmp = Path(this.vertices.last())
+        while (!stack.isEmpty()) {
+            val curr = stack.pop()
+            val currNeighb = this.getNeighbors(curr.vertices.last())
+            if (curr.length <= tmp.length) {
+                currNeighb.filter { !curr.contains(it) }.forEach { stack.push(Path(curr, this, it)) }
+            } else {
+                tmp = curr
+            }
+        }
+        return tmp
+    }
 }
