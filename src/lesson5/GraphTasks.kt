@@ -113,7 +113,6 @@ fun Graph.largestIndependentVertexSet(): Set<Graph.Vertex> {
                         next.add(i)
                     }
                     put(i, child, next, graph)
-
                 }
             }
         }

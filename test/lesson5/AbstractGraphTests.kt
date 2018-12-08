@@ -190,6 +190,7 @@ abstract class AbstractGraphTests {
         } catch (ex: NoSuchElementException) {
 
         }
+
         val graph4 = GraphBuilder().apply { addVertex("Z") }.build()
         assertEquals(setOf(graph4["Z"]), graph4.largestIndependentVertexSet())
     }
