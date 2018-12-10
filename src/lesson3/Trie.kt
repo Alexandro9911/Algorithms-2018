@@ -1,5 +1,7 @@
 package lesson3
 
+import java.util.*
+
 class Trie : AbstractMutableSet<String>(), MutableSet<String> {
     override var size: Int = 0
         private set
@@ -64,5 +66,4 @@ class Trie : AbstractMutableSet<String>(), MutableSet<String> {
     override fun iterator(): MutableIterator<String> {
         TODO()
     }
-    
 }
