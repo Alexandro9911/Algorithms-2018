@@ -93,7 +93,7 @@ fun Graph.minimumSpanningTree(): Graph {
  *
  * Эта задача может быть зачтена за пятый и шестой урок одновременно
  *
- * Tрудоемкость =  O(V+E)  Где V -  количестко вершин в графе, Е - количество ребер графа
+ * Tрудоемкость =  O(V)  Где V -  количестко вершин в графе
  * Ресурсоемкость =  O(V)
  *
  */
@@ -107,7 +107,7 @@ fun Graph.largestIndependentVertexSet(): Set<Graph.Vertex> {
         val fVert = this.vertices.iterator().next()
         next.add(fVert)
         fun put(parent: Graph.Vertex, child: MutableSet<Graph.Vertex>, next: MutableSet<Graph.Vertex>, graph: Graph) {
-            for (i in graph.getNeighbors(parent)) {
+            for (i in graph.getNeighbors(parent)) {  // O(V)
                 if (!next.contains(i) && !child.contains(i)) {
                     if (next.contains(parent)) {
                         child.add(i)
